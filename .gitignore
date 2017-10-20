@@ -1,2 +1,5 @@
 .idea/
 Prodavachnik/
+.doc
+~$*.doc*
+~$*.zip*
