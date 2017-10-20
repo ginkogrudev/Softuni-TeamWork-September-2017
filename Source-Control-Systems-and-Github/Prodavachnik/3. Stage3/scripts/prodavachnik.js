@@ -9,24 +9,22 @@ function startApp() {
     $("#linkListAds").click(listAdverts);
     $("#linkLogout").click(logoutUser);
 
-    const kinveyBaseUrl = "https://mock.api.com/";
-    const kinveyAppKey = "kid_rk";
-    const kinveyAppSecret = "736804a668";
-
-    
     // Bind the form submit buttons
     $("#buttonLoginUser").click(loginUser);
     $("#buttonRegisterUser").click(registerUser);
 
-	
+    const kinveyBaseUrl = "https://mock.api.com/";
+    const kinveyAppKey = "kid_rk";
+    const kinveyAppSecret = "736804a668";
+
     function showView(viewName) {
         // Hide all views and show the selected view only
         $('main > section').hide();
         $('#' + viewName).show();
     }
-	
-	function showHideMenuLinks() {
-      $("#linkHome").show();
+
+    function showHideMenuLinks() {
+        $("#linkHome").show();
         if (sessionStorage.getItem('authToken') === null) {
             // No logged in user
             $("#linkLogin").show();
@@ -42,7 +40,6 @@ function startApp() {
         }
     }
 
-
     function showHomeView() {
         showView('viewHome');
     }
@@ -56,8 +53,8 @@ function startApp() {
         $('#formRegister').trigger('reset');
         showView('viewRegister');
     }
-	
-	    // user/login
+
+    // user/login
     function loginUser() {
         const kinveyLoginUrl = kinveyBaseUrl + "user/" + kinveyAppKey + "/login";
         const kinveyAuthHeaders = {
@@ -79,7 +76,6 @@ function startApp() {
         function loginSuccess(userInfo) {
             saveAuthInSession(userInfo);
             showHideMenuLinks();
-            showHomeView();
             listAdverts();
         }
     }

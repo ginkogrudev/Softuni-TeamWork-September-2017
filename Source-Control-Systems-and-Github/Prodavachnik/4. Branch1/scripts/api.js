@@ -1,5 +1,18 @@
 (function () {
     // Mock repository
+    let adverts = [
+        {
+            _id: 0,
+            _acl: {
+                creator: 0
+            },
+            title: "XBoss 1080",
+            publisher: "Pesho",
+            datePublished: "2017-06-04",
+            price: 100
+        }
+    ];
+
     let users = [
         {
             _kmd: {
@@ -24,23 +37,8 @@
             _id: 2,
             username: "Maria",
             password: "m"
-        },
-
-    ];
-
-    let adverts = [
-        {
-            _id: 0,
-            _acl: {
-                creator: 0
-            },
-            title: "XBoss 1080",
-            publisher: "Pesho",
-            datePublished: "2017-06-04",
-            price: 100
         }
     ];
-
 
     // User login
     $.mockjax(function (requestSettings) {
