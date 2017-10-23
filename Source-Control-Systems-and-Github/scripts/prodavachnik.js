@@ -14,11 +14,6 @@ function startApp() {
     $("#linkListAds").click(listAdverts);
     $("#linkCreateAd").click(showCreateAdView);
     $("#linkLogout").click(logoutUser);
-
-    const kinveyBaseUrl = "https://mock.api.com/";
-    const kinveyAppKey = "kid_rk";
-    const kinveyAppSecret = "736804a668";
-
     
     // Bind the form submit buttons
     $("#buttonLoginUser").click(loginUser);
@@ -37,6 +32,9 @@ function startApp() {
         ajaxStop: function() { $("#loadingBox").hide() }
     });
 
+    const kinveyBaseUrl = "https://mock.api.com/";
+    const kinveyAppKey = "kid_rk";
+    const kinveyAppSecret = "736804a668";
 	
     function showView(viewName) {
         // Hide all views and show the selected view only
@@ -45,7 +43,7 @@ function startApp() {
     }
 	
 	function showHideMenuLinks() {
-      $("#linkHome").show();
+        $("#linkHome").show();
         if (sessionStorage.getItem('authToken') === null) {
             // No logged in user
             $("#linkLogin").show();
@@ -87,8 +85,6 @@ function startApp() {
         showError(errorMsg);
     }
 
-
-
     function showHomeView() {
         showView('viewHome');
     }
@@ -126,7 +122,6 @@ function startApp() {
             data: userData,
             success: loginSuccess,
             error: handleAjaxError
-
         });
 
         function loginSuccess(userInfo) {
@@ -223,14 +218,14 @@ function startApp() {
                 for (let advert of adverts) {
                     let readMoreLink = $(`<a data-id="${advert._id}" href="#">[Read More]</a>`)
                         .click(function() { displayAdvert($(this).attr("data-id"))
-                    let links = [];
+                    let links = [readMoreLink];
 
                     if (advert._acl.creator == sessionStorage['userId']) {
                         let deleteLink = $(`<a data-id="${advert._id}" href="#">[Delete]</a>`)
                             .click(function() { deleteAdvert($(this).attr("data-id")) });
                         let editLink = $(`<a data-id="${advert._id}" href="#">[Edit]</a>`)
                             .click(function() { loadAdvertForEdit($(this).attr("data-id")) });
-                        links = [deleteLink, ' ', editLink];
+                        links = [readMoreLink, ' ', deleteLink, ' ', editLink];
                     }
 
                     advertsTable.append($('<tr>').append(
@@ -239,10 +234,7 @@ function startApp() {
                         $('<td>').text(advert.publisher),
                         $('<td>').text(advert.datePublished),
                         $('<td>').text(advert.price),
-
-                        $('<td>').append(readMoreLink)
                         $('<td>').append(links)
-
                     ));
                 }
 
@@ -250,42 +242,7 @@ function startApp() {
             }
         }
     }
-        function displayAdvert(advertId){
-            const kinveyAdvertUrl = kinveyBaseUrl + "appdata/" +
-                kinveyAppKey + "/adverts/" + advertId;
-            const kinveyAuthHeaders = {
-                'Authorization': "Kinvey " + sessionStorage.getItem('authToken'),
-            };
 
-            $.ajax({
-                method: "GET",
-                url: kinveyAdvertUrl,
-                headers: kinveyAuthHeaders,
-                success: displayAdvertSuccess,
-                error: handleAjaxError
-            });
-
-            $('#viewDetailsAd').empty();
-
-            function displayAdvertSuccess(advert) {
-                let advertInfo = $('<div>').append(
-                    $('<img>').attr("src", advert.image),
-                    $('<br>'),
-                    $('<label>').text('Title:'),
-                    $('<h1>').text(advert.title),
-                    $('<label>').text('Description:'),
-                    $('<p>').text(advert.description),
-                    $('<label>').text('Publisher:'),
-                    $('<div>').text(advert.publisher),
-                    $('<label>').text('Date:'),
-                    $('<div>').text(advert.datePublished));
-
-                $('#viewDetailsAd').append(advertInfo);
-
-                showView('viewDetailsAd');
-            }
-        }
-}
     // advertisement/create
     function createAdvert() {
         const kinveyAuthHeaders = {
@@ -379,6 +336,42 @@ function startApp() {
         }
     }
 
+        function displayAdvert(advertId){
+            const kinveyAdvertUrl = kinveyBaseUrl + "appdata/" +
+                kinveyAppKey + "/adverts/" + advertId;
+            const kinveyAuthHeaders = {
+                'Authorization': "Kinvey " + sessionStorage.getItem('authToken'),
+            };
+
+            $.ajax({
+                method: "GET",
+                url: kinveyAdvertUrl,
+                headers: kinveyAuthHeaders,
+                success: displayAdvertSuccess,
+                error: handleAjaxError
+            });
+
+            $('#viewDetailsAd').empty();
+
+            function displayAdvertSuccess(advert) {
+                let advertInfo = $('<div>').append(
+                    $('<img>').attr("src", advert.image),
+                    $('<br>'),
+                    $('<label>').text('Title:'),
+                    $('<h1>').text(advert.title),
+                    $('<label>').text('Description:'),
+                    $('<p>').text(advert.description),
+                    $('<label>').text('Publisher:'),
+                    $('<div>').text(advert.publisher),
+                    $('<label>').text('Date:'),
+                    $('<div>').text(advert.datePublished));
+
+                $('#viewDetailsAd').append(advertInfo);
+
+                showView('viewDetailsAd');
+            }
+        }
+
     // advertisement/edit POST
     function editAdvert() {
         const kinveyAdvertUrl =  kinveyBaseUrl + "appdata/" + kinveyAppKey +
@@ -412,5 +405,4 @@ function startApp() {
             showInfo('Advertisement edited.');
         }
     }
-
 }
