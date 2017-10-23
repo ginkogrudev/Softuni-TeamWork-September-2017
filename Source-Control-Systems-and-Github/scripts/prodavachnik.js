@@ -301,4 +301,5 @@ function startApp() {
             listAdverts();
         }
     }
+
 }
